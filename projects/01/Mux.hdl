@@ -14,8 +14,16 @@ CHIP Mux {
     OUT out;
 
     PARTS:
-    Or(a=a, b=sel, out=aor);
-    Xor(a=aor, b=sel, out=axor);
-    And(a=b, b=sel, out=band);
-    Xor(a=axor, b=band, out=out);
+    // the way id did it
+    //Or(a=a, b=sel, out=aor);
+    //Xor(a=aor, b=sel, out=axor);
+    //And(a=b, b=sel, out=band);
+    //Xor(a=axor, b=band, out=out);
+    
+    // the better way
+	Not(in=sel, out=notsel);
+	And(a=notsel, b=a, out=sela);
+	And(a=sel, b=b, out=selb);
+	Or(a=sela, b=selb, out=out);
+
 }
