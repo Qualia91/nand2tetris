@@ -12,3 +12,50 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 // Put your code here.
+    @STATE
+    M=0     // Set initial keyboard state as 0 (White)
+(INPUTLOOP)  // Loop over user input
+    @KBD
+    D=M
+    @SKIPSET
+    D;JEQ    // If keyboard is 0, skip set
+    D=-1     // Set current state = -1
+(SKIPSET)
+    @NEWSTATE
+    M=D
+    // check if screen state has changed
+    @STATE
+    D=D-M
+    @END
+    D;JEQ    // If same, skip to end
+    // Set state
+    @NEWSTATE
+    D=M
+    @STATE
+    M=D
+    // Reset pixels
+    @8192
+    D=A
+    @PIXELS
+    M=D
+(SCREENLOOP) // Loop over pixels
+    @PIXELS
+    D=M
+    @END
+    D;JLT    // If pixels remaining is 0, end
+    @SCREEN
+    D=D+A
+    @CURRENTPIXEL
+    M=D
+    @STATE
+    D=M
+    @CURRENTPIXEL
+    A=M
+    M=D      // Set current pixle to current state
+    @PIXELS
+    M=M-1    // Reduce PIXELS by 1
+    @SCREENLOOP
+    0;JMP    // Goto SCREENLOOP
+(END)
+    @INPUTLOOP
+    0;JMP // Infinite loop
